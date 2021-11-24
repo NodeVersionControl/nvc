@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "Use": {
+      "commandName": "Project",
+      "commandLineArgs": "-u 10.24.1"
+    },
+    "Install": {
+      "commandName": "Project",
+      "commandLineArgs": "-i 14.18.1"
+    },
+    "Remove": {
+      "commandName": "Project",
+      "commandLineArgs": "-r 14.18.1"
+    },
+    "List": {
+      "commandName": "Project",
+      "commandLineArgs": "-l"
+    }
+  }
+}
