@@ -7,7 +7,14 @@ namespace NodeVersionControl
 
         public static string GetCurrentNodeVersion()
         {
-            Process? nodeVersion = Process.Start(new ProcessStartInfo(Path.Combine(Globals.NODE_DIRECTORY, "node.exe"), "--version")
+            string currentNodeExePath = Path.Combine(Globals.NODE_DIRECTORY, "node.exe");
+
+            if (Globals.DEBUG)
+            {
+                Console.WriteLine($"DEBUG: Starting process to get the current NodeJS version from {currentNodeExePath}");
+            }
+
+            Process? nodeVersion = Process.Start(new ProcessStartInfo(currentNodeExePath, "--version")
             {
                 UseShellExecute = false,
                 RedirectStandardOutput = true,
@@ -17,7 +24,7 @@ namespace NodeVersionControl
             if (nodeVersion != null)
                 return nodeVersion.StandardOutput.ReadToEnd().Trim();
             else
-                return "";
+                throw new Exception("Failed to get Current NodeJS version.");
         }
 
         public static void DeleteDirectory(string path, bool keepRootFolder = false)

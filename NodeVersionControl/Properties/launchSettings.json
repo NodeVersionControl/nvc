@@ -1,20 +1,24 @@
 {
   "profiles": {
-    "Use": {
+    "Change": {
       "commandName": "Project",
-      "commandLineArgs": "-u 10.24.1"
+      "commandLineArgs": "-d -c 10.24.1"
     },
     "Install": {
       "commandName": "Project",
-      "commandLineArgs": "-i 14.18.1"
+      "commandLineArgs": "-d -i 14.18.1"
     },
     "Remove": {
       "commandName": "Project",
-      "commandLineArgs": "-r 14.18.1"
+      "commandLineArgs": "-d -r 14.18.1"
     },
     "List": {
       "commandName": "Project",
-      "commandLineArgs": "-l"
+      "commandLineArgs": "-l -d"
+    },
+    "BadInstall": {
+      "commandName": "Project",
+      "commandLineArgs": "-d -i madeup"
     }
   }
 }

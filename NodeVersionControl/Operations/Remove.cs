@@ -12,6 +12,11 @@
 
             string versionToRemovePath = Path.Combine(Globals.NODE_VERSIONS_DIRECTORY, versionToRemove);
 
+            if (Globals.DEBUG)
+            {
+                Console.WriteLine($"DEBUG: Searching for directory {versionToRemovePath} for NodeJS version {versionToRemove} to remove.");
+            }
+
             if (Directory.Exists(versionToRemovePath))
             {
                 SharedMethods.DeleteDirectory(versionToRemovePath);
@@ -23,7 +28,7 @@
             }
             else
             {
-                Console.WriteLine($"Version {versionToRemovePath} did not exist.");
+                Console.WriteLine($"Version {versionToRemove} did not exist.");
             }
         }
     }

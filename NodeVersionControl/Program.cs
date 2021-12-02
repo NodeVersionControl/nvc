@@ -31,6 +31,8 @@ namespace NodeVersionControl
                    {
                        Globals.DEBUG = o.Debug;
 
+                       SetupFileStructure();
+
                        if (!string.IsNullOrEmpty(o.Change))
                        {
                            Change.ChangeVersion(o.Change);
@@ -64,5 +66,31 @@ namespace NodeVersionControl
             }
         }
 
+        private static void SetupFileStructure()
+        {
+            if (!Directory.Exists(Globals.NODE_VERSIONS_DIRECTORY))
+            {
+                if (Globals.DEBUG)
+                    Console.WriteLine($"Creating NodeJS Versions Directory {Globals.NODE_VERSIONS_DIRECTORY}");
+
+                Directory.CreateDirectory(Globals.NODE_VERSIONS_DIRECTORY);
+            }
+
+            if (!Directory.Exists(Globals.NODE_DIRECTORY))
+            {
+                if (Globals.DEBUG)
+                    Console.WriteLine($"Creating NodeJS Directory {Globals.NODE_DIRECTORY}");
+
+                Directory.CreateDirectory(Globals.NODE_DIRECTORY);
+            }
+
+            if (!Directory.Exists(Globals.TEMP_FOLDER))
+            {
+                if (Globals.DEBUG)
+                    Console.WriteLine($"Creating NVC Temp Directory {Globals.TEMP_FOLDER}");
+
+                Directory.CreateDirectory(Globals.TEMP_FOLDER);
+            }
+        }
     }
 }
