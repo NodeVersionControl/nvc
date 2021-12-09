@@ -66,7 +66,7 @@ namespace NodeVersionControl
         private static void ParseConfigs()
         {
             Configs = new Dictionary<string, string>();
-            string configJson = File.ReadAllText(Path.Combine(Environment.CurrentDirectory, "config.json"));
+            string configJson = File.ReadAllText(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "config.json"));
             JObject jsonObject = JObject.Parse(configJson);
 
             foreach(JProperty jp in jsonObject.Properties())
