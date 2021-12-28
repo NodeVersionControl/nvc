@@ -1,4 +1,5 @@
-﻿using System.IO.Compression;
+﻿using Serilog;
+using System.IO.Compression;
 
 namespace NodeVersionControl
 {
@@ -13,7 +14,7 @@ namespace NodeVersionControl
 
             if (Directory.Exists(nodeVersionPath))
             {
-                Console.WriteLine("Trying to install a version of NodeJS that is already installed.");
+                Log.Logger.Information("Trying to install a version of NodeJS that is already installed.");
                 return;
             }
 
@@ -22,9 +23,9 @@ namespace NodeVersionControl
             ExtractZipFolder(new DirectoryInfo(Globals.TEMP_FOLDER).GetFiles()[0].FullName, nodeVersionPath);
 
             if (Directory.Exists(nodeVersionPath))
-                Console.WriteLine($"Successfully installed version {versionToInstall}.");
+                Log.Logger.Information($"Successfully installed version {versionToInstall}.");
             else
-                Console.WriteLine($"Failed to install version {versionToInstall}.");
+                Log.Logger.Information($"Failed to install version {versionToInstall}.");
         }
 
         private static void CleanTempFolder()
@@ -35,9 +36,7 @@ namespace NodeVersionControl
             }
             else
             {
-                if (Globals.DEBUG)
-                    Console.WriteLine($"DEBUG: Clearing out Temp folder {Globals.TEMP_FOLDER}");
-
+                Log.Logger.Debug($"Clearing out Temp folder {Globals.TEMP_FOLDER}");
                 SharedMethods.DeleteDirectory(Globals.TEMP_FOLDER, true);
             }
         }
@@ -46,10 +45,7 @@ namespace NodeVersionControl
         {
             string url = $"https://nodejs.org/dist/{versionToInstall}/node-{versionToInstall}-win-{Globals.WINDOWS_ARCITECTURE}.zip";
 
-            if (Globals.DEBUG)
-            {
-                Console.WriteLine($"DEBUG: Downloading NodeJS version by sending GET request to {url}");
-            }
+            Log.Logger.Debug($"Downloading NodeJS version by sending GET request to {url}");
 
             Task<HttpResponseMessage> response = new HttpClient().GetAsync(url);
 
@@ -57,19 +53,13 @@ namespace NodeVersionControl
 
             if (response.Result.IsSuccessStatusCode)
             {
-                if (Globals.DEBUG)
-                {
-                    Console.WriteLine($"DEBUG: Recieved Success Status Code from nodejs.org.");
-                }
+                Log.Logger.Debug($"Recieved Success Status Code from nodejs.org.");
 
                 using (var stream = response.Result.Content.ReadAsStream())
                 {
                     string zipPath = Path.Combine(Globals.TEMP_FOLDER, versionToInstall + ".zip");
 
-                    if (Globals.DEBUG)
-                    {
-                        Console.WriteLine($"DEBUG: Attempting to save zip file to {zipPath}");
-                    }
+                    Log.Logger.Debug($"Attempting to save zip file to {zipPath}");
 
                     using (Stream zip = File.OpenWrite(zipPath))
                     {
@@ -85,10 +75,7 @@ namespace NodeVersionControl
 
         private static void ExtractZipFolder(string zipFilePath, string destinationPath)
         {
-            if (Globals.DEBUG)
-            {
-                Console.WriteLine($"DEBUG: Attempting to extract files from {zipFilePath} to {destinationPath}");
-            }
+            Log.Logger.Debug($"Attempting to extract files from {zipFilePath} to {destinationPath}");
 
             ZipFile.ExtractToDirectory(zipFilePath, destinationPath);
 

@@ -4,6 +4,10 @@
       "commandName": "Project",
       "commandLineArgs": "-d -c 10.24.1"
     },
+    "PartialChange": {
+      "commandName": "Project",
+      "commandLineArgs": "-d -c 10"
+    },
     "Install": {
       "commandName": "Project",
       "commandLineArgs": "-d -i 14.18.1"

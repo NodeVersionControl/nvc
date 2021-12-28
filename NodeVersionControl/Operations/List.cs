@@ -1,4 +1,6 @@
-﻿namespace NodeVersionControl
+﻿using Serilog;
+
+namespace NodeVersionControl
 {
     internal static class List
     {
@@ -8,24 +10,21 @@
 
             string currentVersion = SharedMethods.GetCurrentNodeVersion();
 
-            if (Globals.DEBUG)
-            {
-                Console.WriteLine($"DEBUG: Searching directory {versionsDir} for all installed NodeJS versions.");
-            }
+            Log.Logger.Debug($"Searching directory {versionsDir} for all installed NodeJS versions.");
 
             if(versionsDir.GetDirectories().Count() == 0)
             {
-                Console.WriteLine("No versions of NodeJS currently installed.");
+                Log.Logger.Information("No versions of NodeJS currently installed.");
             }
             else
             {
-                Console.WriteLine("Current installed versions:");
+                Log.Logger.Information("Current installed versions:");
                 foreach (DirectoryInfo versionDir in versionsDir.GetDirectories())
                 {
                     if(versionDir.Name == currentVersion)
-                        Console.WriteLine(versionDir.Name + " (Current Version)");
+                        Log.Logger.Information(versionDir.Name + " (Current Version)");
                     else
-                        Console.WriteLine(versionDir.Name);
+                        Log.Logger.Information(versionDir.Name);
                 }
             }
         }

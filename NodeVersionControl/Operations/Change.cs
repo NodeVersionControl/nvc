@@ -1,4 +1,6 @@
-﻿namespace NodeVersionControl
+﻿using Serilog;
+
+namespace NodeVersionControl
 {
     internal class Change
     {
@@ -9,9 +11,15 @@
             if (!newVersion.StartsWith('v'))
                 newVersion = "v" + newVersion;
 
+            if(newVersion.Length < 8)
+            {
+                Log.Logger.Debug($"Attempting to change versions using a partial version name: {newVersion}.");
+                newVersion = SharedMethods.MatchInstalledVersion(newVersion);
+            }
+
             if (oldVersion == newVersion)
             {
-                Console.WriteLine($"Already using version {newVersion} of NodeJS.");
+                Log.Logger.Information($"Already using version {newVersion} of NodeJS.");
                 return;
             }
 
@@ -19,7 +27,7 @@
 
             if (!Directory.Exists(newVersionPath))
             {
-                Console.WriteLine($"NodeJS version {newVersion} not installed.");
+                Log.Logger.Information($"NodeJS version {newVersion} not installed.");
                 return;
             }
 
@@ -30,9 +38,9 @@
             RestoreGlobalNodeModules(newVersionPath);
 
             if (newVersion == SharedMethods.GetCurrentNodeVersion())
-                Console.WriteLine($"Successfully switched NodeJS version from {oldVersion} to {newVersion}.");
+                Log.Logger.Information($"Successfully switched NodeJS version from {oldVersion} to {newVersion}.");
             else
-                Console.WriteLine($"Failed to switch NodeJS version to {newVersion}.");
+                Log.Logger.Information($"Failed to switch NodeJS version to {newVersion}.");
         }
 
         private static void ChangeNodeVersions(string versionDirectory)
@@ -40,11 +48,8 @@
             //Delete current NodeJS version
             if (Directory.Exists(Globals.NODE_DIRECTORY))
             {
-                if (Globals.DEBUG)
-                {
-                    Console.WriteLine($"DEBUG: Removing files in working NodeJS directory {Globals.NODE_DIRECTORY}");
-                }
-
+                Log.Logger.Debug($"Removing files in working NodeJS directory {Globals.NODE_DIRECTORY}");
+                
                 SharedMethods.DeleteDirectory(Globals.NODE_DIRECTORY, keepRootFolder: true);
             }
             else
@@ -53,11 +58,7 @@
             }
 
             //Copy over requested NodeJS version
-            if (Globals.DEBUG)
-            {
-                Console.WriteLine($"DEBUG: Copying new NodeJS version from {versionDirectory} into working NodeJS directory.");
-            }
-
+            Log.Logger.Debug($"Copying new NodeJS version from {versionDirectory} into working NodeJS directory.");
             SharedMethods.CopyDirectoryContents(versionDirectory, Globals.NODE_DIRECTORY);
         }
 
@@ -65,19 +66,16 @@
         {
             string npmGlobalsStorageFolder = Path.Combine(versionDirectory, Globals.NPM_GLOBALS_STORAGE_FOLDER_NAME);
 
-            if (Globals.DEBUG)
-            {
-                Console.WriteLine($"DEBUG: Restoring NPM Global packages from storage folder {npmGlobalsStorageFolder} to {Globals.NPM_GLOBALS_DIRECTORY}");
-            }
+            Log.Logger.Debug($"Restoring NPM Global packages from storage folder {npmGlobalsStorageFolder} to {Globals.NPM_GLOBALS_DIRECTORY}");
 
             if (Directory.Exists(npmGlobalsStorageFolder))
             {
                 //Copy over global NPM packages
                 SharedMethods.CopyDirectoryContents(npmGlobalsStorageFolder, Globals.NPM_GLOBALS_DIRECTORY);
             }
-            else if (Globals.DEBUG)
+            else
             {
-                Console.WriteLine($"DEBUG: No stored NPM global modules found.");
+                Log.Logger.Debug($"No stored NPM global modules found.");
             }
             
         }
@@ -89,10 +87,7 @@
             {
                 string versionedNpmGlobalsDirectory = Path.Combine(Globals.NODE_VERSIONS_DIRECTORY, currentVersion, Globals.NPM_GLOBALS_STORAGE_FOLDER_NAME);
 
-                if (Globals.DEBUG)
-                {
-                    Console.WriteLine($"DEBUG: Saving NPM Globals Directory to storage folder. {versionedNpmGlobalsDirectory}");
-                }
+                Log.Logger.Debug($"Saving NPM Globals Directory to storage folder. {versionedNpmGlobalsDirectory}");
 
                 if (!Directory.Exists(versionedNpmGlobalsDirectory))
                 {
@@ -100,26 +95,19 @@
                 }
                 else
                 {
-                    if (Globals.DEBUG)
-                    {
-                        Console.WriteLine($"DEBUG: Version {currentVersion} contains old NPM Global Packages, purging folder {versionedNpmGlobalsDirectory}");
-                    }
-
+                    Log.Logger.Debug($"Version {currentVersion} contains old NPM Global Packages, purging folder {versionedNpmGlobalsDirectory}");
                     SharedMethods.DeleteDirectory(versionedNpmGlobalsDirectory, keepRootFolder:true);
                 }
 
                 SharedMethods.CopyDirectoryContents(Globals.NPM_GLOBALS_DIRECTORY, versionedNpmGlobalsDirectory);
 
-                if (Globals.DEBUG)
-                {
-                    Console.WriteLine($"DEBUG: Purging NPM Globals Directory for next version.");
-                }
-
+                Log.Logger.Debug($"Purging NPM Globals Directory for next version.");
+                
                 SharedMethods.DeleteDirectory(Globals.NPM_GLOBALS_DIRECTORY, keepRootFolder: true);
             }
-            else if(Globals.DEBUG)
+            else
             {
-                Console.WriteLine($"DEBUG: NPM Globals package folder {Globals.NPM_GLOBALS_DIRECTORY} did not exist.");
+                Log.Logger.Debug($"NPM Globals package folder {Globals.NPM_GLOBALS_DIRECTORY} did not exist.");
             }
         }
     }

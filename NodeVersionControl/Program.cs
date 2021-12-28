@@ -1,4 +1,7 @@
 ﻿using CommandLine;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 
 namespace NodeVersionControl
 {
@@ -27,10 +30,9 @@ namespace NodeVersionControl
             try
             {
                 Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed<Options>(o =>
+                   .WithParsed(o =>
                    {
-                       Globals.DEBUG = o.Debug;
-
+                       SetupSerilog(o.Debug);
                        SetupFileStructure();
 
                        if (!string.IsNullOrEmpty(o.Change))
@@ -56,13 +58,8 @@ namespace NodeVersionControl
             }
             catch(Exception ex)
             {
-                Console.WriteLine("Error encountered...");
-                Console.WriteLine(ex.Message);
-
-                if (Globals.DEBUG)
-                {
-                    Console.WriteLine(ex.StackTrace);
-                }
+                Log.Logger.Error(ex.Message);
+                Log.Logger.Debug(ex.StackTrace);
             }
         }
 
@@ -70,27 +67,35 @@ namespace NodeVersionControl
         {
             if (!Directory.Exists(Globals.NODE_VERSIONS_DIRECTORY))
             {
-                if (Globals.DEBUG)
-                    Console.WriteLine($"Creating NodeJS Versions Directory {Globals.NODE_VERSIONS_DIRECTORY}");
-
+                Log.Logger.Debug($"Creating NodeJS Versions Directory {Globals.NODE_VERSIONS_DIRECTORY}");
                 Directory.CreateDirectory(Globals.NODE_VERSIONS_DIRECTORY);
             }
 
             if (!Directory.Exists(Globals.NODE_DIRECTORY))
             {
-                if (Globals.DEBUG)
-                    Console.WriteLine($"Creating NodeJS Directory {Globals.NODE_DIRECTORY}");
-
+                Log.Logger.Debug($"Creating NodeJS Directory {Globals.NODE_DIRECTORY}");
                 Directory.CreateDirectory(Globals.NODE_DIRECTORY);
             }
 
             if (!Directory.Exists(Globals.TEMP_FOLDER))
             {
-                if (Globals.DEBUG)
-                    Console.WriteLine($"Creating NVC Temp Directory {Globals.TEMP_FOLDER}");
-
+                Log.Logger.Debug($"Creating NVC Temp Directory {Globals.TEMP_FOLDER}");
                 Directory.CreateDirectory(Globals.TEMP_FOLDER);
             }
+        }
+
+        private static void SetupSerilog(bool debug)
+        {
+            LoggingLevelSwitch lls = new LoggingLevelSwitch() 
+            { 
+                MinimumLevel = (debug) ? LogEventLevel.Debug : LogEventLevel.Information 
+            };
+
+            Log.Logger = new LoggerConfiguration()
+                .WriteTo.Console()
+                .WriteTo.File(Path.Combine(Globals.LOG_FILE_LOCATION, "log.txt"))
+                .MinimumLevel.ControlledBy(lls)
+                .CreateLogger();
         }
     }
 }

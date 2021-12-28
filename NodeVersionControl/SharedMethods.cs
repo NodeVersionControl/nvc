@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using Serilog;
+using System.Diagnostics;
 
 namespace NodeVersionControl
 {
@@ -9,10 +10,7 @@ namespace NodeVersionControl
         {
             string currentNodeExePath = Path.Combine(Globals.NODE_DIRECTORY, "node.exe");
 
-            if (Globals.DEBUG)
-            {
-                Console.WriteLine($"DEBUG: Starting process to get the current NodeJS version from {currentNodeExePath}");
-            }
+            Log.Logger.Debug($"Starting process to get the current NodeJS version from {currentNodeExePath}");
 
             Process? nodeVersion = Process.Start(new ProcessStartInfo(currentNodeExePath, "--version")
             {
@@ -72,6 +70,20 @@ namespace NodeVersionControl
                 Directory.CreateDirectory(Path.Combine(destPath, dir.Name));
                 CopyDirectoryContents(dir.FullName, Path.Combine(destPath, dir.Name));
             }
+        }
+
+        public static string MatchInstalledVersion(string partialVersion)
+        {
+            DirectoryInfo versionsDir = new DirectoryInfo(Globals.NODE_VERSIONS_DIRECTORY);
+            List<DirectoryInfo> matchedDirectories = versionsDir.GetDirectories().ToList().FindAll(d => d.Name.StartsWith(partialVersion));
+
+            if(matchedDirectories.Count == 0)
+                throw new Exception($"Unable to find version with matching substring: {partialVersion}.");
+            
+            if(matchedDirectories.Count > 1)
+                throw new Exception($"Found multiple versions ({""}) with substring: {partialVersion}.");
+
+            return matchedDirectories.First().Name;
         }
     }
 }
