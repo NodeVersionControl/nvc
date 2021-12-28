@@ -3,6 +3,5 @@
   "NODE_VERSIONS_DIRECTORY": "C:\\nodejsVersions",
   "WINDOWS_ARCITECTURE": "x64",
   "TEMP_FOLDER": "%TEMP%\\NodeJSVersionDownloads",
-  "NPM_GLOBALS_DIRECTORY": "%USERPROFILE%\\AppData\\Roaming\\npm\\node_modules",
-  "LOG_FILE_LOCATION": ".\\"
+  "NPM_GLOBALS_DIRECTORY": "%USERPROFILE%\\AppData\\Roaming\\npm\\node_modules"
 }

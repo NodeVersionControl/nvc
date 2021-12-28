@@ -31,11 +31,13 @@ In order to get NVC to work properly, you will need admin privileges to adjust t
 ### Remove a NodeJS Version
 
 * ``` nvc -r 10.24.1 ```
+* ``` nvc -r 10 ```  *(Handles partial strings if unique)*
 * ``` nvc --remove 10.24.1 ```
 
 ### Change to a NodeJS Version
 
 * ``` nvc -c 10.24.1 ```
+* ``` nvc -c 10 ```  *(Handles partial strings if unique)*
 * ``` nvc --change 10.24.1 ```
 
 ### List all NodeJS Versions

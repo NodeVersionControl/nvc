@@ -46,14 +46,6 @@ namespace NodeVersionControl
                 return Environment.ExpandEnvironmentVariables(ConfigManager.GetConfig("NPM_GLOBALS_DIRECTORY"));
             }
         }
-
-        public static string LOG_FILE_LOCATION
-        {
-            get
-            {
-                return Environment.ExpandEnvironmentVariables(ConfigManager.GetConfig("LOG_FILE_LOCATION"));
-            }
-        }
     }
 
     internal static class ConfigManager

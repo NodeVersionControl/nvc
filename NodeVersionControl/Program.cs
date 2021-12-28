@@ -93,7 +93,7 @@ namespace NodeVersionControl
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
-                .WriteTo.File(Path.Combine(Globals.LOG_FILE_LOCATION, "log.txt"))
+                .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt"))
                 .MinimumLevel.ControlledBy(lls)
                 .CreateLogger();
         }
