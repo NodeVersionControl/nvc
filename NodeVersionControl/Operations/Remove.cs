@@ -15,7 +15,9 @@ namespace NodeVersionControl
             }
 
             if (versionToRemove == SharedMethods.GetCurrentNodeVersion())
+            {
                 throw new Exception($"Trying to remove your current NodeJS version ({versionToRemove}). Switch to another verison before removing.");
+            }
 
             string versionToRemovePath = Path.Combine(Globals.NODE_VERSIONS_DIRECTORY, versionToRemove);
 

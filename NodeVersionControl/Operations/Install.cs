@@ -18,7 +18,9 @@ namespace NodeVersionControl
             }
 
             CleanTempFolder();
+
             DownloadVersionZipToTempFolder(versionToInstall);
+
             ExtractZipFolder(new DirectoryInfo(Globals.TEMP_FOLDER).GetFiles()[0].FullName, nodeVersionPath);
 
             if (Directory.Exists(nodeVersionPath))

@@ -10,6 +10,12 @@ namespace NodeVersionControl
         {
             string currentNodeExePath = Path.Combine(Globals.NODE_DIRECTORY, "node.exe");
 
+            if (!File.Exists(currentNodeExePath))
+            {
+                Log.Logger.Debug("No current NodeJS version found.");
+                return "";
+            }
+
             Log.Logger.Debug($"Starting process to get the current NodeJS version from {currentNodeExePath}");
 
             Process? nodeVersion = Process.Start(new ProcessStartInfo(currentNodeExePath, "--version")
@@ -53,7 +59,10 @@ namespace NodeVersionControl
         public static void CopyDirectoryContents(string sourcePath, string destPath)
         {
             if (!Directory.Exists(sourcePath))
+            {
+                Log.Logger.Debug($"Can't copy directory contents as source path {sourcePath} does not exist.");
                 return;
+            }
 
             DirectoryInfo sourceDirectory = new DirectoryInfo(sourcePath);
 

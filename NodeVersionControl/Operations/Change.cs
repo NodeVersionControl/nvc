@@ -41,6 +41,39 @@ namespace NodeVersionControl
                 Log.Logger.Information($"Failed to switch NodeJS version to {newVersion}.");
         }
 
+        private static void StoreGlobalNodeModules(string currentVersion)
+        {
+            if (string.IsNullOrEmpty(currentVersion))
+            {
+                Log.Logger.Debug("No current version, skipping storing global Node Modules.");
+                return;
+            }
+
+            //Delete the node modules stored in the versions directory
+            if (Directory.Exists(Globals.NPM_GLOBALS_DIRECTORY))
+            {
+                string versionedNpmGlobalsDirectory = Path.Combine(Globals.NODE_VERSIONS_DIRECTORY, currentVersion, Globals.NPM_GLOBALS_STORAGE_FOLDER_NAME);
+
+                Log.Logger.Debug($"Saving NPM Globals Directory to storage folder. {versionedNpmGlobalsDirectory}");
+
+                if (!Directory.Exists(versionedNpmGlobalsDirectory))
+                {
+                    Directory.CreateDirectory(versionedNpmGlobalsDirectory);
+                }
+                else
+                {
+                    Log.Logger.Debug($"Version {currentVersion} contains old stored NPM Global Packages, purging folder {versionedNpmGlobalsDirectory}");
+                    SharedMethods.DeleteDirectory(versionedNpmGlobalsDirectory, keepRootFolder: true);
+                }
+
+                SharedMethods.CopyDirectoryContents(Globals.NPM_GLOBALS_DIRECTORY, versionedNpmGlobalsDirectory);
+            }
+            else
+            {
+                Log.Logger.Debug($"NPM Globals package folder {Globals.NPM_GLOBALS_DIRECTORY} did not exist.");
+            }
+        }
+
         private static void ChangeNodeVersions(string versionDirectory)
         {
             //Delete current NodeJS version
@@ -62,6 +95,9 @@ namespace NodeVersionControl
 
         private static void RestoreGlobalNodeModules(string versionDirectory)
         {
+            Log.Logger.Debug($"Purging NPM Globals Directory for next version.");
+            SharedMethods.DeleteDirectory(Globals.NPM_GLOBALS_DIRECTORY, keepRootFolder: true);
+
             string npmGlobalsStorageFolder = Path.Combine(versionDirectory, Globals.NPM_GLOBALS_STORAGE_FOLDER_NAME);
 
             Log.Logger.Debug($"Restoring NPM Global packages from storage folder {npmGlobalsStorageFolder} to {Globals.NPM_GLOBALS_DIRECTORY}");
@@ -76,37 +112,6 @@ namespace NodeVersionControl
                 Log.Logger.Debug($"No stored NPM global modules found.");
             }
             
-        }
-
-        private static void StoreGlobalNodeModules(string currentVersion)
-        {
-            //Delete the node modules stored in the versions directory
-            if (Directory.Exists(Globals.NPM_GLOBALS_DIRECTORY))
-            {
-                string versionedNpmGlobalsDirectory = Path.Combine(Globals.NODE_VERSIONS_DIRECTORY, currentVersion, Globals.NPM_GLOBALS_STORAGE_FOLDER_NAME);
-
-                Log.Logger.Debug($"Saving NPM Globals Directory to storage folder. {versionedNpmGlobalsDirectory}");
-
-                if (!Directory.Exists(versionedNpmGlobalsDirectory))
-                {
-                    Directory.CreateDirectory(versionedNpmGlobalsDirectory);
-                }
-                else
-                {
-                    Log.Logger.Debug($"Version {currentVersion} contains old stored NPM Global Packages, purging folder {versionedNpmGlobalsDirectory}");
-                    SharedMethods.DeleteDirectory(versionedNpmGlobalsDirectory, keepRootFolder:true);
-                }
-
-                SharedMethods.CopyDirectoryContents(Globals.NPM_GLOBALS_DIRECTORY, versionedNpmGlobalsDirectory);
-
-                Log.Logger.Debug($"Purging NPM Globals Directory for next version.");
-                
-                SharedMethods.DeleteDirectory(Globals.NPM_GLOBALS_DIRECTORY, keepRootFolder: true);
-            }
-            else
-            {
-                Log.Logger.Debug($"NPM Globals package folder {Globals.NPM_GLOBALS_DIRECTORY} did not exist.");
-            }
         }
     }
 }
