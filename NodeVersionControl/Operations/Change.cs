@@ -7,14 +7,12 @@ namespace NodeVersionControl
         public static void ChangeVersion(string newVersion)
         {
             string oldVersion = SharedMethods.GetCurrentNodeVersion();
+            newVersion = SharedMethods.SanatizeVersionString(newVersion);
 
-            if (!newVersion.StartsWith('v'))
-                newVersion = "v" + newVersion;
-
-            if(newVersion.Length < 8)
+            if (newVersion.Length < 8)
             {
                 Log.Logger.Debug($"Attempting to change versions using a partial version name: {newVersion}.");
-                newVersion = SharedMethods.MatchInstalledVersion(newVersion);
+                newVersion = SharedMethods.MatchInstalledVersionFromPartial(newVersion);
             }
 
             if (oldVersion == newVersion)
@@ -95,7 +93,7 @@ namespace NodeVersionControl
                 }
                 else
                 {
-                    Log.Logger.Debug($"Version {currentVersion} contains old NPM Global Packages, purging folder {versionedNpmGlobalsDirectory}");
+                    Log.Logger.Debug($"Version {currentVersion} contains old stored NPM Global Packages, purging folder {versionedNpmGlobalsDirectory}");
                     SharedMethods.DeleteDirectory(versionedNpmGlobalsDirectory, keepRootFolder:true);
                 }
 

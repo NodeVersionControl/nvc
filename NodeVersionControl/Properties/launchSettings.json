@@ -6,11 +6,11 @@
     },
     "PartialChange": {
       "commandName": "Project",
-      "commandLineArgs": "-d -c 10"
+      "commandLineArgs": "-d -c 14"
     },
     "Install": {
       "commandName": "Project",
-      "commandLineArgs": "-d -i 14.18.1"
+      "commandLineArgs": "-d -i v14.18.2"
     },
     "Remove": {
       "commandName": "Project",
@@ -23,6 +23,18 @@
     "BadInstall": {
       "commandName": "Project",
       "commandLineArgs": "-d -i madeup"
+    },
+    "NoCommand": {
+      "commandName": "Project",
+      "commandLineArgs": ""
+    },
+    "MultipleCommands": {
+      "commandName": "Project",
+      "commandLineArgs": "-i 14.18.1 -r 14.18.1"
+    },
+    "BadVersionString": {
+      "commandName": "Project",
+      "commandLineArgs": "-i 14&"
     }
   }
 }

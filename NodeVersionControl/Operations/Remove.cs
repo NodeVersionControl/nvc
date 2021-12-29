@@ -6,13 +6,12 @@ namespace NodeVersionControl
     {
         public static void RemoveVersion(string versionToRemove)
         {
-            if (!versionToRemove.StartsWith('v'))
-                versionToRemove = "v" + versionToRemove;
+            versionToRemove = SharedMethods.SanatizeVersionString(versionToRemove);
 
             if (versionToRemove.Length < 8)
             {
                 Log.Logger.Debug($"Attempting to remove a version using a partial version name: {versionToRemove}.");
-                versionToRemove = SharedMethods.MatchInstalledVersion(versionToRemove);
+                versionToRemove = SharedMethods.MatchInstalledVersionFromPartial(versionToRemove);
             }
 
             if (versionToRemove == SharedMethods.GetCurrentNodeVersion())

@@ -7,8 +7,7 @@ namespace NodeVersionControl
     {
         public static void InstallVersion(string versionToInstall)
         {
-            if (!versionToInstall.StartsWith('v'))
-                versionToInstall = "v" + versionToInstall;
+            versionToInstall = SharedMethods.SanatizeVersionString(versionToInstall);
 
             string nodeVersionPath = Path.Combine(Globals.NODE_VERSIONS_DIRECTORY, versionToInstall);
 

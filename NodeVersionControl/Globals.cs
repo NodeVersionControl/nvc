@@ -4,7 +4,6 @@ namespace NodeVersionControl
 {
     internal class Globals
     {
-        public static bool DEBUG = false;
         public static string NPM_GLOBALS_STORAGE_FOLDER_NAME = "NPM_GLOBALS";
 
         public static string NODE_DIRECTORY

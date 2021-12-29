@@ -8,8 +8,6 @@ namespace NodeVersionControl
         {
             DirectoryInfo versionsDir = new DirectoryInfo(Globals.NODE_VERSIONS_DIRECTORY);
 
-            string currentVersion = SharedMethods.GetCurrentNodeVersion();
-
             Log.Logger.Debug($"Searching directory {versionsDir} for all installed NodeJS versions.");
 
             if(versionsDir.GetDirectories().Count() == 0)
@@ -18,14 +16,21 @@ namespace NodeVersionControl
             }
             else
             {
-                Log.Logger.Information("Current installed versions:");
-                foreach (DirectoryInfo versionDir in versionsDir.GetDirectories())
-                {
-                    if(versionDir.Name == currentVersion)
-                        Log.Logger.Information(versionDir.Name + " (Current Version)");
-                    else
-                        Log.Logger.Information(versionDir.Name);
-                }
+                LogVersions(versionsDir);
+            }
+        }
+
+        private static void LogVersions(DirectoryInfo versionsDir)
+        {
+            string currentVersion = SharedMethods.GetCurrentNodeVersion();
+
+            Log.Logger.Information("Current installed versions:");
+            foreach (DirectoryInfo versionDir in versionsDir.GetDirectories())
+            {
+                if (versionDir.Name == currentVersion)
+                    Log.Logger.Information(versionDir.Name + " (Current Version)");
+                else
+                    Log.Logger.Information(versionDir.Name);
             }
         }
     }

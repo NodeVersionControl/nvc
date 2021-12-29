@@ -9,20 +9,20 @@ namespace NodeVersionControl
     {
         public class Options
         {
-            [Option('c', "change", Required = false, HelpText = "Change to a different NodeJS version.")]
-            public string Change { get; set; }
+            [Option('c', "change", SetName = "change", HelpText = "Change to a different NodeJS version.")]
+            public string? Change { get; set; }
 
-            [Option('r', "remove", Required = false, HelpText = "Remove a NodeJS version.")]
-            public string Remove { get; set; }
+            [Option('r', "remove", SetName ="remove", HelpText = "Remove a NodeJS version.")]
+            public string? Remove { get; set; }
 
-            [Option('i', "install", Required = false, HelpText = "Installs a new NodeJS version.")]
-            public string Install { get; set; }
+            [Option('i', "install", SetName = "install", HelpText = "Installs a new NodeJS version.")]
+            public string? Install { get; set; }
 
-            [Option('d', "debug", Required = false, HelpText ="Enable debug mode.")]
-            public bool Debug { get; set; }
-
-            [Option('l', "list", Required = false, HelpText = "Lists all installed NodeJS versions.")]
+            [Option('l', "list", SetName = "list", HelpText = "Lists all installed NodeJS versions.")]
             public bool List { get; set; }
+
+            [Option('d', "debug", HelpText = "Enable debug mode.")]
+            public bool Debug { get; set; }
         }
 
         static void Main(string[] args)
@@ -39,20 +39,21 @@ namespace NodeVersionControl
                        {
                            Change.ChangeVersion(o.Change);
                        }
-
                        else if (!string.IsNullOrEmpty(o.Remove))
                        {
                            Remove.RemoveVersion(o.Remove);
                        }
-
                        else if (!string.IsNullOrEmpty(o.Install))
                        {
                            Install.InstallVersion(o.Install);
                        }
-
                        else if (o.List)
                        {
                            List.ListVersions();
+                       }
+                       else
+                       {
+                           Log.Logger.Information("Command not recognized.");
                        }
                    });
             }
@@ -93,7 +94,11 @@ namespace NodeVersionControl
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
-                .WriteTo.File(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt"))
+                .WriteTo.File(
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt"), 
+                    retainedFileCountLimit:2,
+                    rollOnFileSizeLimit:true
+                    )
                 .MinimumLevel.ControlledBy(lls)
                 .CreateLogger();
         }
