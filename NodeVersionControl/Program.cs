@@ -1,7 +1,11 @@
 ﻿using CommandLine;
+using NodeVersionControl.Model;
+using NodeVersionControl.Operations;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
+using System;
+using System.Text.Json;
 
 namespace NodeVersionControl
 {
@@ -23,53 +27,75 @@ namespace NodeVersionControl
 
             [Option('d', "debug", HelpText = "Enable debug mode.")]
             public bool Debug { get; set; }
+            [Option('s', "release", SetName = "release", HelpText = "List all release.")]
+            public bool Release { get; set; }
         }
-        //static void Main(string[] args)
+        //public async static Task Main()
         //{
-        //    Mains(new string[] { "-c v22" });
 
+        //    Mains(new string[] { "--release" }).Wait();
         //}
 
-        static void Main(string[] args)
+        public async static Task Main(string[] args)
         {
-            //Install.InstallVersion("v22.0.0");
-            try
+            string version = "";
+            if (args.Length == 0)
             {
-                Parser.Default.ParseArguments<Options>(args)
-                   .WithParsed(o =>
-                   {
-                       SetupSerilog(o.Debug);
-                       SetupFileStructure();
-
-                       if (!string.IsNullOrEmpty(o.Change))
-                       {
-                           Change.ChangeVersion(o.Change);
-                       }
-                       else if (!string.IsNullOrEmpty(o.Remove))
-                       {
-                           Remove.RemoveVersion(o.Remove);
-                       }
-                       else if (!string.IsNullOrEmpty(o.Install))
-                       {
-                           Install.InstallVersion(o.Install);
-                       }
-                       else if (o.List)
-                       {
-                           List.ListVersions();
-                       }
-                       else
-                       {
-                           Log.Logger.Information("Command not recognized.");
-                       }
-                   });
+                Log.Logger.Information("No arguments provided.");
+                return;
+            }
+            else if (args.Length == 1 && args[0] == "--release")
+            {
+                version = await Release.GetVersion();
+                Console.WriteLine($"Você escolheu {version}.");
+                Main(new string[] { "--install", version }).Wait(); // instalr versao selecionada
 
             }
-            catch (Exception ex)
+            //Install.InstallVersion("v22.0.0");
+            else
             {
-                Log.Logger.Error(ex.Message);
-                Log.Logger.Debug(ex.StackTrace);
+                try
+                {
+                    Parser.Default.ParseArguments<Options>(args)
+                       .WithParsed(o =>
+                       {
+                           SetupSerilog(o.Debug);
+                           SetupFileStructure();
+
+                           if (!string.IsNullOrEmpty(o.Change))
+                           {
+                               Change.ChangeVersion(o.Change);
+                           }
+                           else if (!string.IsNullOrEmpty(o.Remove))
+                           {
+                               Remove.RemoveVersion(o.Remove);
+                           }
+                           else if (!string.IsNullOrEmpty(o.Install))
+                           {
+                               Install.InstallVersion(o.Install);
+                               //Main(new string[] { "--change ", version }).Wait(); //trocar versao apos o download
+                           }
+                           else if (o.List)
+                           {
+                               List.ListVersions();
+                           }
+                           else
+                           {
+                               Log.Logger.Information("Command not recognized.");
+                           }
+                       });
+
+                }
+                catch (Exception ex)
+                {
+                    Log.Logger.Error(ex.Message);
+                    Log.Logger.Debug(ex.StackTrace);
+                }
+
             }
         }
+
+      
 
         private static void SetupFileStructure()
         {
