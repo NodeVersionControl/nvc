@@ -12,7 +12,7 @@ namespace NodeVersionControl
             [Option('c', "change", SetName = "change", HelpText = "Change to a different NodeJS version.")]
             public string? Change { get; set; }
 
-            [Option('r', "remove", SetName ="remove", HelpText = "Remove a NodeJS version.")]
+            [Option('r', "remove", SetName = "remove", HelpText = "Remove a NodeJS version.")]
             public string? Remove { get; set; }
 
             [Option('i', "install", SetName = "install", HelpText = "Installs a new NodeJS version.")]
@@ -24,9 +24,15 @@ namespace NodeVersionControl
             [Option('d', "debug", HelpText = "Enable debug mode.")]
             public bool Debug { get; set; }
         }
+        //static void Main(string[] args)
+        //{
+        //    Mains(new string[] { "-c v22" });
+
+        //}
 
         static void Main(string[] args)
         {
+            //Install.InstallVersion("v22.0.0");
             try
             {
                 Parser.Default.ParseArguments<Options>(args)
@@ -56,8 +62,9 @@ namespace NodeVersionControl
                            Log.Logger.Information("Command not recognized.");
                        }
                    });
+
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log.Logger.Error(ex.Message);
                 Log.Logger.Debug(ex.StackTrace);
@@ -87,17 +94,17 @@ namespace NodeVersionControl
 
         private static void SetupSerilog(bool debug)
         {
-            LoggingLevelSwitch lls = new LoggingLevelSwitch() 
-            { 
-                MinimumLevel = (debug) ? LogEventLevel.Debug : LogEventLevel.Information 
+            LoggingLevelSwitch lls = new LoggingLevelSwitch()
+            {
+                MinimumLevel = (debug) ? LogEventLevel.Debug : LogEventLevel.Information
             };
 
             Log.Logger = new LoggerConfiguration()
                 .WriteTo.Console()
                 .WriteTo.File(
-                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt"), 
-                    retainedFileCountLimit:2,
-                    rollOnFileSizeLimit:true
+                    Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "log.txt"),
+                    retainedFileCountLimit: 2,
+                    rollOnFileSizeLimit: true
                     )
                 .MinimumLevel.ControlledBy(lls)
                 .CreateLogger();

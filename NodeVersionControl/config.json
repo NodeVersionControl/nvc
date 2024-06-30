@@ -1,6 +1,6 @@
 ﻿{
-  "NODE_DIRECTORY": "C:\\nodejs",
-  "NODE_VERSIONS_DIRECTORY": "C:\\nodejsVersions",
+  "NODE_DIRECTORY": "D:\\nodejs",
+  "NODE_VERSIONS_DIRECTORY": "D:\\nodejsVersions",
   "WINDOWS_ARCITECTURE": "x64",
   "TEMP_FOLDER": "%TEMP%\\NodeJSVersionDownloads",
   "NPM_GLOBALS_DIRECTORY": "%USERPROFILE%\\AppData\\Roaming\\npm\\node_modules"

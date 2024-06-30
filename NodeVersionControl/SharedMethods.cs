@@ -97,12 +97,18 @@ namespace NodeVersionControl
 
         public static string SanatizeVersionString(string version)
         {
+            Console.WriteLine($"Original version: '{version}'"); // Depuração
+
             version = version.ToLower();
+            Console.WriteLine($"Lowercase version: '{version}'"); // Depuração
 
             Regex rx = new Regex(@"[^v0-9.]");
 
             if (rx.Match(version).Success)
+            {
+                Console.WriteLine("Invalid characters found"); // Depuração
                 throw new Exception("Only following characters are allowed in the version: '0-9', 'v', 'V', '.'");
+            }
 
             if (!version.StartsWith('v'))
                 version = "v" + version;
