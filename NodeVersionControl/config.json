@@ -1,7 +1,7 @@
 ﻿{
-  "NODE_DIRECTORY": "D:\\nodejs",
-  "NODE_VERSIONS_DIRECTORY": "D:\\nodejsVersions",
-  "WINDOWS_ARCITECTURE": "x64",
-  "TEMP_FOLDER": "%TEMP%\\NodeJSVersionDownloads",
-  "NPM_GLOBALS_DIRECTORY": "%USERPROFILE%\\AppData\\Roaming\\npm\\node_modules"
-}
+  "NODE_DIRECTORY": "D:\\nodejs",  //diretorio node esta instalado e que tenha permissão de escrita
+  "NODE_VERSIONS_DIRECTORY": "D:\\nodejsVersions", //diretorio onde as versões do node serão baixadas
+  "WINDOWS_ARCITECTURE": "x64", //arquitetura do windows
+  "TEMP_FOLDER": "%TEMP%\\NodeJSVersionDownloads", //diretorio temporario para download das versões
+  "NPM_GLOBALS_DIRECTORY": "%USERPROFILE%\\AppData\\Roaming\\npm\\node_modules" //diretorio onde os modulos globais do npm serão instalados
+} 

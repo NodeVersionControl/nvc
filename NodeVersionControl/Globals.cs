@@ -2,10 +2,13 @@
 
 namespace NodeVersionControl
 {
-    internal class Globals
+
+    public static class Globals
     {
+
         public static string NPM_GLOBALS_STORAGE_FOLDER_NAME = "NPM_GLOBALS";
 
+        
         public static string NODE_DIRECTORY
         {
             get
@@ -13,7 +16,7 @@ namespace NodeVersionControl
                 return Environment.ExpandEnvironmentVariables(ConfigManager.GetConfig("NODE_DIRECTORY"));
             }
         }
-
+        
         public static string NODE_VERSIONS_DIRECTORY
         {
             get

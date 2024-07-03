@@ -5,6 +5,7 @@ using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using System;
+using System.Security.AccessControl;
 using System.Text.Json;
 
 namespace NodeVersionControl
@@ -13,27 +14,37 @@ namespace NodeVersionControl
     {
         public class Options
         {
-            [Option('c', "change", SetName = "change", HelpText = "Change to a different NodeJS version.")]
+            [Option('l', "list", SetName = "list", HelpText = "Lists all installed NodeJS versions.")]
+            public bool List { get; set; }
+
+            [Option('c', "change", SetName = "change", HelpText = "Manually switch to a different version of NodeJS. Ex.: change nvc v20.0.1")]
             public string? Change { get; set; }
+
+            [Option('i', "install", SetName = "install", HelpText = "Manually install a different version of NodeJS. Ex.: change nvc v20.0.1")]
+            public string? Install { get; set; }
+
+            [Option('s', "release", SetName = "release", HelpText = "Install from the version list.")]
+            public bool Release { get; set; }
+
+            [Option('v', "version", SetName = "version", HelpText = "Lists all installed versions of NodeJS. Select to change version.")]
+            public bool Version { get; set; }
 
             [Option('r', "remove", SetName = "remove", HelpText = "Remove a NodeJS version.")]
             public string? Remove { get; set; }
 
-            [Option('i', "install", SetName = "install", HelpText = "Installs a new NodeJS version.")]
-            public string? Install { get; set; }
-
-            [Option('l', "list", SetName = "list", HelpText = "Lists all installed NodeJS versions.")]
-            public bool List { get; set; }
-
             [Option('d', "debug", HelpText = "Enable debug mode.")]
             public bool Debug { get; set; }
-            [Option('s', "release", SetName = "release", HelpText = "List all release.")]
-            public bool Release { get; set; }
+
         }
+
         //public async static Task Main()
         //{
+        //    //colocar na instalaco do nvc
+        //    //SetPermissions(Globals.NODE_DIRECTORY);
+        //    //SetPermissions(Globals.NODE_VERSIONS_DIRECTORY);
+        //    //SetPermissions(Globals.TEMP_FOLDER);
 
-        //    Mains(new string[] { "--release" }).Wait();
+        //    Mains(new string[] { "--version" }).Wait();
         //}
 
         public async static Task Main(string[] args)
@@ -49,9 +60,17 @@ namespace NodeVersionControl
                 version = await Release.GetVersion();
                 Console.WriteLine($"Você escolheu {version}.");
                 Main(new string[] { "--install", version }).Wait(); // instalr versao selecionada
+                Main(new string[] { "--change", version }).Wait();
 
             }
-            //Install.InstallVersion("v22.0.0");
+            else if (args.Length == 1 && args[0] == "--version")
+            {
+                version = Version.ListVersions();
+                Console.WriteLine($"Você escolheu {version}.");
+                Main(new string[] { "--change", version }).Wait(); // instalr versao selecionada
+
+            }
+
             else
             {
                 try
@@ -95,8 +114,6 @@ namespace NodeVersionControl
             }
         }
 
-      
-
         private static void SetupFileStructure()
         {
             if (!Directory.Exists(Globals.NODE_VERSIONS_DIRECTORY))
@@ -135,5 +152,38 @@ namespace NodeVersionControl
                 .MinimumLevel.ControlledBy(lls)
                 .CreateLogger();
         }
+
+        private static void SetPermissions(string diretory)
+        {
+            string nodeInstallationPath = diretory; // Substitua pelo caminho real do Node
+
+            try
+            {
+                // Obter o objeto de segurança atual da pasta
+                DirectoryInfo directoryInfo = new DirectoryInfo(nodeInstallationPath);
+                DirectorySecurity directorySecurity = directoryInfo.GetAccessControl();
+
+                // Adicionar permissões para um usuário específico
+                string username = Environment.UserName; // Ou substitua pelo nome do usuário desejado
+                //FileSystemAccessRule accessRule = new FileSystemAccessRule(username, FileSystemRights.FullControl, AccessControlType.Allow);
+                FileSystemAccessRule accessRule = new FileSystemAccessRule(username, FileSystemRights.FullControl, InheritanceFlags.ContainerInherit | InheritanceFlags.ObjectInherit, PropagationFlags.None, AccessControlType.Allow);
+                directorySecurity.AddAccessRule(accessRule);
+
+                // Definir o novo objeto de segurança com as permissões modificadas
+                directoryInfo.SetAccessControl(directorySecurity);
+
+                Console.WriteLine($"Permissões atribuídas com sucesso para {nodeInstallationPath}");
+            }
+            catch (UnauthorizedAccessException ex)
+            {
+                Console.WriteLine("Erro: A operação requer permissões elevadas. Execute o aplicativo como administrador.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Erro ao atribuir permissões: {ex.Message}");
+            }
+        }
+
+
     }
 }

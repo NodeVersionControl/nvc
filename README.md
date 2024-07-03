@@ -1,81 +1,81 @@
 # Node Version Control
 
-**.Net 6 Command line tool for managing NodeJS versions without admin privileges**
+**Ferramenta de linha de comando .Net 8 para gerenciar versões do NodeJS*
 
-This application takes inspiration from the popular NVM (Node Version Manager) tool. NVM unfortunately requires constant Admin privileges in order to function properly.
+Este aplicativo se inspira na popular ferramenta NVM (Node Version Manager).
 
   
-With this application, you will be able to install, remove and change between different versions of NodeJS all without having to use admin privileges. NVC will also keep your global NPM packages in working order with each version of NodeJS to allow for a seamless transition between projects.
+Com este aplicativo, você poderá instalar, remover e alternar entre diferentes versões do NodeJS, tudo sem precisar usar privilégios de administrador. O NVC também manterá seus pacotes NPM globais em funcionamento com cada versão do NodeJS para permitir uma transição perfeita entre projetos.
 
-In order to get NVC to work properly, you will need admin privileges to adjust the system's PATH variable and to optionally store NVC under the \Program Files\ directory for access anywhere in a cmd window.
-  
-## Setup
+Para que o NVC funcione corretamente, você precisará de privilégios de administrador para ajustar a variável PATH do sistema e, opcionalmente, armazenar o NVC no diretório \Program Files\ para acesso em qualquer lugar em uma janela cmd.
 
-1. Clone the repository to your computer.
+## Configurar
 
-2. Build the application under Release (Have to have Visual Studio 2022)
+1. Clone o repositório em seu computador.
 
-3. Copy the Release NVC folder to \Program Files\ and add it to your System's PATH variable. This is so you can access NVC from anywhere in the cmd line/powershell (Requires Admin privledges)
+2. Construa o aplicativo em versão (é necessário ter Visual Studio 2022)
 
-4. Edit your system's PATH variable to change the location of your NodeJS installation.  NVC's Default location will be ``` C:\nodejs ```. See the Configuration section to change the default location.
+3. Copie a pasta Release NVC para \Program Files\ e adicione-a à variável PATH do seu sistema. Isto é para que você possa acessar o NVC de qualquer lugar na linha cmd/powershell (requer privilégios de administrador)
 
-5. Execute commands from the by using nvc in command line or powershell.
+4. Edite a variável PATH do seu sistema para alterar o local da instalação do NodeJS.  A localização padrão do NVC será ``` C:\nodejs ```. Consulte a seção Configuração para alterar o local padrão.
 
-## Commands
+5. Execute comandos usando nvc na linha de comando ou powershell.
 
-### Install a new NodeJS Version
+## Comandos
+
+### Instale uma nova versão do NodeJS
 
 * ``` nvc -i 10.24.1 ```
 * ``` nvc --install 10.24.1 ```
 
-### Remove a NodeJS Version
+### Remover uma versão do NodeJS
 
 * ``` nvc -r 10.24.1 ```
-* ``` nvc -r 10 ```  *(Handles partial strings if unique)*
+* ``` nvc -r 10 ``` *(Lida com strings parciais se for único)*
 * ``` nvc --remove 10.24.1 ```
 
-### Change to a NodeJS Version
+### Mudar para uma versão do NodeJS
 
 * ``` nvc -c 10.24.1 ```
-* ``` nvc -c 10 ```  *(Handles partial strings if unique)*
+* ``` nvc -c 10 ``` *(Lida com strings parciais se for único)*
 * ``` nvc --change 10.24.1 ```
 
-### List all NodeJS Versions
+### Listar todas as versões do NodeJS
 
 * ``` nvc -l ```
 * ``` nvc --list ```
 
 
-## Configuration
+## Configuração
 
-**Configuration changes can be made by adjusting the config.json file.**
+**Alterações na configuração podem ser feitas ajustando o arquivo config.json.**
 
 ### NODE_DIRECTORY
 
-Directory where the node.exe will be executed from. You will need to update your systems environment path to point to this folder as well. **Make sure this directory doesn't require admin privileges to read/write to this location.**
+Diretório onde o node.exe será executado. Você precisará atualizar o caminho do ambiente do seu sistema para apontar para esta pasta também. **Certifique-se de que este diretório não exija privilégios de administrador para ler/gravar neste local.**
 
-Default Value: ``` C:\nodejs ```
+Valor padrão: ``` C:\nodejs ```
 
 ### NODE_VERSIONS_DIRECTORY
 
-The directory that all saved node versions will be stored. **Make sure this directory doesn't require admin privileges to read/write to this location.**
+O diretório onde todas as versões de nós salvas serão armazenadas. **Certifique-se de que este diretório não exija privilégios de administrador para ler/gravar neste local.**
 
-Default Value: ``` C:\nodejsVersions ```
+Valor padrão: ``` C:\nodejsVersions ```
 
-### WINDOWS_ARCITECTURE
+### WINDOWS_ARCITECTURA
 
-Architecture of the NodeJS you want to install. IE x64 or x86
+Arquitetura do NodeJS que você deseja instalar. Ou seja, x64 ou x86
 
-Default Value: ``` x64 ```
+Valor padrão: ``` x64 ```
 
 ### TEMP_FOLDER
 
-Directory to a Temp folder used to download Zip files. **Make sure that it points to an empty folder, as it will regularly remove all files in that folder. You have been warned.**
+Diretório para uma pasta Temp usada para baixar arquivos Zip. **Certifique-se de que aponta para uma pasta vazia, pois removerá regularmente todos os arquivos dessa pasta. Você foi avisado.**
 
-Default Value: ``` %TEMP%\NodeJSVersionDownloads ```
+Valor padrão: ``` %TEMP%\NodeJSVersionDownloads ```
 
 ### NPM_GLOBALS_DIRECTORY
 
-Directory that NPM installs its global packages. The default value is the default folder location for NPM. If you have configured NPM to install global packages elsewhere you will need to adjust this value to match.
+Diretório onde o NPM instala seus pacotes globais. O valor padrão é o local da pasta padrão para NPM. Se você configurou o NPM para instalar pacotes globais em outro lugar, você precisará ajustar esse valor para corresponder.
 
-Default Value: ``` %USERPROFILE%\AppData\Roaming\npm\node_modules ```
+Valor padrão: ``` %USERPROFILE%\AppData\Roaming\npm\node_modules ```
