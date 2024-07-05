@@ -2,7 +2,7 @@
   "profiles": {
     "Change": {
       "commandName": "Project",
-      "commandLineArgs": "-d -c 10.24.1"
+      "commandLineArgs": "-d -c 22.0.0"
     },
     "PartialChange": {
       "commandName": "Project",
@@ -10,11 +10,11 @@
     },
     "Install": {
       "commandName": "Project",
-      "commandLineArgs": "-d -i v14.18.2"
+      "commandLineArgs": "-d -i v22.1.0"
     },
     "Remove": {
       "commandName": "Project",
-      "commandLineArgs": "-d -r 14.18.1"
+      "commandLineArgs": "-d -r 22.3.0"
     },
     "List": {
       "commandName": "Project",
@@ -30,7 +30,7 @@
     },
     "MultipleCommands": {
       "commandName": "Project",
-      "commandLineArgs": "-i 14.18.1 -r 14.18.1"
+      "commandLineArgs": "-i 22.0.0 -r 22.0.0"
     },
     "BadVersionString": {
       "commandName": "Project",
