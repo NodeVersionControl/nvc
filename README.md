@@ -1,4 +1,4 @@
-# Node Version Control
+# Node Version Control (Controle de Versão do Node)
 
 **Ferramenta de linha de comando .Net 8 para gerenciar versões do NodeJS*
 
@@ -23,27 +23,38 @@ Para que o NVC funcione corretamente, você precisará de privilégios de admini
 
 ## Comandos
 
-### Instale uma nova versão do NodeJS
-
-* ``` nvc -i 10.24.1 ```
-* ``` nvc --install 10.24.1 ```
-
-### Remover uma versão do NodeJS
-
-* ``` nvc -r 10.24.1 ```
-* ``` nvc -r 10 ``` *(Lida com strings parciais se for único)*
-* ``` nvc --remove 10.24.1 ```
-
-### Mudar para uma versão do NodeJS
-
-* ``` nvc -c 10.24.1 ```
-* ``` nvc -c 10 ``` *(Lida com strings parciais se for único)*
-* ``` nvc --change 10.24.1 ```
-
 ### Listar todas as versões do NodeJS
 
 * ``` nvc -l ```
 * ``` nvc --list ```
+
+### Mude manualmente para uma versão diferente do NodeJS.
+
+* ``` nvc -c xx.xx.xx ```
+* ``` nvc -c xx ``` *(Lida com strings parciais se for único)*
+* ``` nvc --change xx.xx.xx ```
+
+
+### Mude manualmente para uma versão diferente do NodeJS.
+
+* ``` nvc -i xx.xx.xx ```
+* ``` nvc --install xx.xx.xx ```
+
+### Instalação automática através da lista de versões
+
+* ``` nvc -r ```
+* ``` nvc --release```
+
+### Lista todas as versões instaladas do NodeJS. Selecione para alterar a versão
+
+* ``` nvc -v ```
+* ``` nvc --version```
+
+### Remover uma versão do NodeJS
+
+* ``` nvc -r xx.xx.xx ```
+* ``` nvc -r xx ``` *(Lida com strings parciais se for único)*
+* ``` nvc --remove xx.xx.xx ```
 
 
 ## Configuração
